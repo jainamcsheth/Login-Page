@@ -26,7 +26,7 @@ class RememberForgot extends StatelessWidget {
             ),
             Text(
               'Remember Me',
-              style: Theme.of(context).textTheme.body1.copyWith(
+              style: Theme.of(context).textTheme.bodyText2.copyWith(
                 fontSize: 14,
               ),
             ),
@@ -36,7 +36,7 @@ class RememberForgot extends StatelessWidget {
       trailing: FlatButton(
         child: Text(
           'Forgot Password?',
-          style: Theme.of(context).textTheme.body1.copyWith(
+          style: Theme.of(context).textTheme.bodyText2.copyWith(
             color: Colors.purple[400],
             fontSize: 14,
           ),

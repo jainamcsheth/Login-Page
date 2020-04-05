@@ -10,13 +10,13 @@ class LoginFormFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      // width: double.infinity,
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-            color: Colors.purple[100],
-            blurRadius: 15.0,
-            // spreadRadius: 5.0,
-            offset: Offset(0, 10))
+          color: Colors.purple[100],
+          blurRadius: 50.0,
+          spreadRadius: -5,
+          offset: Offset(0, 5),
+        )
       ]),
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),

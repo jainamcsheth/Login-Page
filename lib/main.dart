@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: ThemeData.light().textTheme.copyWith(
-              body1: TextStyle(
+              bodyText2: TextStyle(
                 fontSize: 18,
               ),
             ),

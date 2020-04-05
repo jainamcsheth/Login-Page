@@ -59,25 +59,9 @@ class LoginState extends State<LoginForm> {
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 1000),
                 curve: Curves.fastLinearToSlowEaseIn,
-                width: _loginBtnOpen ? 500 : 25,
+                width: _loginBtnOpen ? 500 : 30,
                 padding: _loginBtnOpen ? EdgeInsets.all(15.0) : null,
-                child: _loginBtnOpen
-                    ? Text(
-                        'Login',
-                        style: Theme.of(context).textTheme.body1.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.center,
-                      )
-                    : Container(
-                        height: 50,
-                        width: 50,
-                        child: Image.asset(
-                          'assets/images/loading_transparent_red_gif.gif',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                child: loginBtnText,
               ),
               onPressed: () {
                 _setStateOfLoginBtn(false);
@@ -102,6 +86,26 @@ class LoginState extends State<LoginForm> {
         ],
       ),
     );
+  }
+
+  Widget get loginBtnText {
+    return (_loginBtnOpen
+        ? Text(
+            'Login',
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+            textAlign: TextAlign.center,
+          )
+        : Container(
+            height: 50,
+            width: 50,
+            child: Image.asset(
+              'assets/images/loading_transparent_red_gif.gif',
+              fit: BoxFit.cover,
+            ),
+          ));
   }
 
   void _handleLogin(BuildContext context, String invalidField) {
@@ -141,9 +145,10 @@ class LoginState extends State<LoginForm> {
             invalidField == 'email'
                 ? 'Please enter valid Email Id'
                 : 'Please enter valid Password',
-            style: Theme.of(context).textTheme.body1.copyWith(
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
                   color: Colors.white,
                 ),
+            textAlign: TextAlign.center,
           ),
         ),
       ),
