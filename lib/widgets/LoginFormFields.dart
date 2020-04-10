@@ -27,7 +27,7 @@ class LoginFormFields extends StatelessWidget {
             children: [
               Container(
                 child: TextFormField(
-                  autofocus: false,
+                  autofocus: true,
                   decoration: InputDecoration(
                     hintText: 'Emai Id',
                     prefixIcon: Icon(Icons.email),
@@ -36,6 +36,8 @@ class LoginFormFields extends StatelessWidget {
                     ),
                   ),
                   controller: emailController,
+                  onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                  textInputAction: TextInputAction.next,
                   // validator: (emailVal) {
                   // },
                 ),
@@ -50,6 +52,8 @@ class LoginFormFields extends StatelessWidget {
                     border: InputBorder.none,
                   ),
                   controller: passwordController,
+                  textInputAction: TextInputAction.done,
+                  // onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
                 ),
               ),
             ],

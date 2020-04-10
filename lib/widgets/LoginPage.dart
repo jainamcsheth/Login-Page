@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    height: 25,
+                    height: 10,
                   ),
                   Flexible(
                     flex: 2,
