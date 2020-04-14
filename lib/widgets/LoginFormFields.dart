@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:login/widgets/CustomDialog.dart';
 
 class LoginFormFields extends StatelessWidget {
   final emailController;
   final passwordController;
+  final GlobalKey passKey = new GlobalKey();
 
   LoginFormFields(this.emailController, this.passwordController);
 
@@ -43,7 +45,9 @@ class LoginFormFields extends StatelessWidget {
                 ),
               ),
               Container(
+                key: passKey,
                 child: TextFormField(
+                  // key: passKey,
                   autofocus: false,
                   obscureText: true,
                   decoration: InputDecoration(
@@ -54,12 +58,28 @@ class LoginFormFields extends StatelessWidget {
                   controller: passwordController,
                   textInputAction: TextInputAction.done,
                   // onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+                  onFieldSubmitted: (_) => _showCustomDialog(context),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  void _showCustomDialog(BuildContext context) {
+    final RenderBox box = passKey.currentContext.findRenderObject();
+    var position = box.localToGlobal(Offset.zero);
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return CustomDialog(
+          xAxis: box.size.width + position.dx,
+          yAxis: position.dy - (box.size.height / 2),
+        );
+      },
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:login/widgets/CustomDialog.dart';
 import 'dart:async';
 
 import './LoginFormFields.dart';
@@ -18,6 +20,8 @@ class LoginState extends State<LoginForm> {
   final _loginFormKey = GlobalKey<FormState>();
   bool rememberMe = false;
   bool _loginBtnOpen = true;
+
+  GlobalKey key = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -52,35 +56,29 @@ class LoginState extends State<LoginForm> {
             height: 10,
           ),
           Center(
-            child: RaisedButton(
-              color: Colors.blue[600],
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25)),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 1000),
-                curve: Curves.fastLinearToSlowEaseIn,
-                width: _loginBtnOpen ? 500 : 30,
-                padding: _loginBtnOpen ? EdgeInsets.all(15.0) : null,
-                child: loginBtnText,
-              ),
-              onPressed: () {
-                _setStateOfLoginBtn(false);
-                // if (_loginFormKey.currentState.validate()) {}
-                String invalidField;
-                invalidField = _validateFormFields();
-                if (invalidField != null) {
-                  new Timer(Duration(seconds: 1),
-                      () => _handleLogin(context, invalidField));
-                } else {
-                  // login complete!
-                  _setStateOfLoginBtn(true);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Welcome(emailController.text),
-                    ),
-                  );
+            child: RawKeyboardListener(
+              focusNode: FocusNode(),
+              onKey: (event) {
+                if (event.runtimeType == RawKeyDownEvent &&
+                    (event.logicalKey.keyId ==
+                        LogicalKeyboardKey.enter.keyId)) {
+                  _showCustomDialogBox();
                 }
               },
+              child: RaisedButton(
+                color: Colors.blue[600],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                child: AnimatedContainer(
+                  key: key,
+                  duration: Duration(milliseconds: 1000),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  width: _loginBtnOpen ? 500 : 30,
+                  padding: _loginBtnOpen ? EdgeInsets.all(15.0) : null,
+                  child: loginBtnText,
+                ),
+                onPressed: () => _showCustomDialogBox(),
+              ),
             ),
           ),
         ],
@@ -108,7 +106,51 @@ class LoginState extends State<LoginForm> {
           ));
   }
 
-  void _handleLogin(BuildContext context, String invalidField) {
+  void _handleLoginPressed(BuildContext context) {
+    _setStateOfLoginBtn(false);
+    // if (_loginFormKey.currentState.validate()) {}
+    String invalidField;
+    invalidField = _validateFormFields();
+    if (invalidField != null) {
+      new Timer(
+          Duration(seconds: 1), () => _handleLoginError(context, invalidField));
+    } else {
+      // login complete!
+      _setStateOfLoginBtn(true);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => Welcome(emailController.text),
+        ),
+      );
+    }
+  }
+
+  void _showCustomDialogBox() {
+    final RenderBox box = key.currentContext.findRenderObject();
+    var position = box.localToGlobal(Offset.zero);
+    // print('Size - ${box.size} , Position - $position');
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return CustomDialog(
+          childWidget: Text('My custom Widget - Do you want to login???'),
+          xAxis: box.size.width + position.dx,
+          yAxis: position.dy - (box.size.height / 2),
+          buttons: [
+            CustomButton('Yes', () {
+              _handleLoginPressed(context);
+              Navigator.pop(context);
+            }),
+            CustomButton('Cancel', () => Navigator.pop(context)),
+            CustomButton('No', () => Navigator.pop(context)),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleLoginError(BuildContext context, String invalidField) {
     _setStateOfLoginBtn(true);
     _showScaffold(context, invalidField);
   }
